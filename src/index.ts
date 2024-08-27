@@ -27,6 +27,8 @@ app.use(async(c, next) => {
 
 
 // IP Filtering
+// This function will act like a layer 3 firewall and can do IP filtering
+// for the web service. This is useful for blocking unwanted traffic.
 app.use(async(c, next) => {
 	const ipAdress = c.req.raw.headers.get('x-real-ip')!
 	console.log(`client ip: ${ipAdress}`)
@@ -43,9 +45,12 @@ app.use(async(c, next) => {
 })
 
 // Authorization Header
+// This acts as a layer 7 firewall and can be used to block unauthorized requests
 app.use(async(c, next) => {
 	const secureHeaderValues: Map<string, string> = new Map<string, string>([
-		["secure-header-1", "this is my secret value"]
+		["secure-header-1", "this is my secret value"],
+		//["another example key", "another example value"]
+
 	])
 
 	for (const [key, value] of secureHeaderValues.entries()) {
@@ -64,9 +69,11 @@ app.get('/', async (c, res) => {
 });
 
 // filter for a different header here
+
 app.use(async(c, next) => {
 	const secureHeaderValues: Map<string, string> = new Map<string, string>([
-		["secure-header-2", "this is my secret value"]
+		["secure-header-2", "this is my secret value"],
+		//["another example key", "another example value"]
 	])
 
 	for (const [key, value] of secureHeaderValues.entries()) {
